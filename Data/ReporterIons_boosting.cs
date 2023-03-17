@@ -143,9 +143,9 @@ namespace MASIC.Data
             TMTElevenMZ = 16,
 
             /// <summary>
-            /// Acetylation fragments
+            /// Boosting 16-plex TMT (aka TMT16_boosting or TMTpro_boosting)
             /// </summary>
-            Acetylation = 17,
+            TMTSixteenMZ_boosting = 17,
 
             // ReSharper disable once CommentTypo
 
@@ -282,7 +282,7 @@ namespace MASIC.Data
                     return GetDefaultReporterIons(reporterIonMassMode, REPORTER_ION_TOLERANCE_DA_DEFAULT_TMT6);
 
                 case ReporterIonMassModeConstants.TMTTenMZ or ReporterIonMassModeConstants.TMTElevenMZ or
-                     ReporterIonMassModeConstants.TMTSixteenMZ or ReporterIonMassModeConstants.TMTEighteenMZ:
+                     ReporterIonMassModeConstants.TMTSixteenMZ or ReporterIonMassModeConstants.TMTEighteenMZ or ReporterIonMassModeConstants.TMTSixteenMZ_boosting:
                     return GetDefaultReporterIons(reporterIonMassMode, REPORTER_ION_TOLERANCE_DA_DEFAULT_TMT10);
 
                 case ReporterIonMassModeConstants.ITraqEightMZHighRes:
@@ -503,10 +503,17 @@ namespace MASIC.Data
 
                 // ReSharper restore CommentTypo
 
-                case ReporterIonMassModeConstants.Acetylation:
-                    // Reporter ions for peptides with acetylated lysine residues
-                    reporterIons.Add(new ReporterIonInfo(126.09134));
-                    reporterIons.Add(new ReporterIonInfo(143.11789));
+                case ReporterIonMassModeConstants.TMTSixteenMZ_boosting:
+                    // ReSharper disable once CommentTypo
+                    // TMT 16-plex boosting Isobaric tags (from Thermo), aka TMT16 boosting
+                    // Several of the reporter ion masses are just 49 ppm apart, thus you must use a very tight tolerance of +/-0.003 Da (which is +/-23 ppm)
+                    reporterIons.Add(new ReporterIonInfo(126.127726)); //
+                    reporterIons.Add(new ReporterIonInfo(128.128116)); // 128N
+                    reporterIons.Add(new ReporterIonInfo(129.131471)); // 129N
+                    reporterIons.Add(new ReporterIonInfo(130.134825)); // 130N
+                    reporterIons.Add(new ReporterIonInfo(131.13818));  // 131N
+                    reporterIons.Add(new ReporterIonInfo(132.141535)); // 132N
+                    reporterIons.Add(new ReporterIonInfo(133.14489));  // 133N
                     break;
 
                 case ReporterIonMassModeConstants.NativeOGlcNAc:
@@ -563,7 +570,7 @@ namespace MASIC.Data
                 ReporterIonMassModeConstants.FSFACustomCarbonyl => "FSFA Custom Carbonyl (171.104, 236.074, 157.088 m/z)",
                 ReporterIonMassModeConstants.FSFACustomCarboxylic => "FSFA Custom Carboxylic (171.104, 234.058, 336.174 m/z)",
                 ReporterIonMassModeConstants.FSFACustomHydroxyl => "FSFA Custom Hydroxyl (151.063 and 166.087 m/z)",
-                ReporterIonMassModeConstants.Acetylation => "Acetylated K (126.091 and 143.118 m/z)",
+                ReporterIonMassModeConstants.TMTSixteenMZ_boosting => "16-plex TMT boosting",
                 _ => throw new ArgumentOutOfRangeException(nameof(reporterIonMode), reporterIonMode, null)
             };
         }
@@ -602,7 +609,7 @@ namespace MASIC.Data
                     break;
 
                 case ReporterIonMassModeConstants.TMTTenMZ or ReporterIonMassModeConstants.TMTElevenMZ or
-                     ReporterIonMassModeConstants.TMTSixteenMZ or ReporterIonMassModeConstants.TMTEighteenMZ:
+                     ReporterIonMassModeConstants.TMTSixteenMZ or ReporterIonMassModeConstants.TMTEighteenMZ or ReporterIonMassModeConstants.TMTSixteenMZ_boosting:
                     SetReporterIonMassMode(reporterIonMassMode, REPORTER_ION_TOLERANCE_DA_DEFAULT_TMT10);
                     break;
 
